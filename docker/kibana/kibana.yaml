@@ -1,0 +1,28 @@
+server.name: kibana
+server.host: "0.0.0.0"
+server.publicBaseUrl: "http://localhost:5601"
+
+elasticsearch:
+  hosts: ["http://elasticsearch:9200"]
+  username: "elastic"
+  password: "KrnYfp3YU3xIPRdUg2Uo"
+  ssl:
+    verificationMode: none
+
+xpack.security:
+  enabled: true
+  encryptionKey: "${KIBANA_ENCRYPTION_KEY}"
+
+xpack.encryptedSavedObjects.encryptionKey: "${KIBANA_ENCRYPTION_KEY}"
+xpack.reporting.encryptionKey: "${KIBANA_ENCRYPTION_KEY}"
+
+telemetry.enabled: false
+
+# Configuration authentification personnalisée
+xpack.security.authc.providers:
+  basic.basic1:
+    order: 0
+    icon: "logoElastic"
+    hint: "Utilisez votre email et mot de passe"
+    showInSelector: true
+    enabled: true

@@ -1,0 +1,67 @@
+{
+  "data_view": {
+    "name": "clients",
+    "title": "clients*",
+    "timeFieldName": "date_modification",
+    "fields": {
+      "id_client": {
+        "name": "id_client",
+        "type": "string",
+        "searchable": true
+      },
+      "raison_sociale": {
+        "name": "raison_sociale",
+        "type": "string",
+        "searchable": true
+      },
+      "adresse": {
+        "name": "adresse",
+        "type": "string",
+        "searchable": true
+      },
+      "ville": {
+        "name": "ville",
+        "type": "string",
+        "searchable": true
+      },
+      "pays": {
+        "name": "pays",
+        "type": "string",
+        "searchable": true
+      },
+      "code_postal": {
+        "name": "code_postal",
+        "type": "string",
+        "searchable": true
+      },
+      "email": {
+        "name": "email",
+        "type": "string",
+        "searchable": true
+      },
+      "telephone": {
+        "name": "telephone",
+        "type": "string",
+        "searchable": true
+      },
+      "type_client": {
+        "name": "type_client",
+        "type": "string",
+        "searchable": true
+      },
+      "statut": {
+        "name": "statut",
+        "type": "string",
+        "searchable": true
+      },
+      "date_creation": {
+        "name": "date_creation",
+        "type": "date"
+      },
+      "date_modification": {
+        "name": "date_modification",
+        "type": "date"
+      }
+    }
+  }
+}

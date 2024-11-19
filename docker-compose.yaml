@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  mariadb:
+    image: mariadb:latest
+    container_name: streamline-mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: streamline
+      MYSQL_USER: streamline_user
+      MYSQL_PASSWORD: your_secure_password
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./docker/mariadb/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "3306:3306"
+    networks:
+      - streamline-network
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.0
+    container_name: streamline-elasticsearch
+    environment:
+      - node.name=elasticsearch
+      - cluster.name=streamline-es-cluster
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=false
+      - ELASTIC_PASSWORD=elastic123
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+    networks:
+      - streamline-network
+
+  kibana:
+      build:
+        context: .
+        dockerfile: docker/kibana/Dockerfile
+      environment:
+        - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      ports:
+        - "5601:5601"
+      depends_on:
+        - elasticsearch
+      networks:
+        - streamline-network
+
+  sync-service:
+    build:
+      context: .
+      dockerfile: docker/sync/Dockerfile
+    container_name: streamline-sync
+    networks:
+      - streamline-network
+    restart: always
+
+networks:
+  streamline-network:
+    driver: bridge
+
+volumes:
+  mariadb_data:
+  elasticsearch_data:
+  kibana_data:

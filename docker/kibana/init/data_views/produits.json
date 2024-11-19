@@ -1,0 +1,49 @@
+{
+  "data_view": {
+    "name": "produits",
+    "title": "produits*",
+    "timeFieldName": "date_modification",
+    "fields": {
+      "id_produit": {
+        "name": "id_produit",
+        "type": "string"
+      },
+      "nom_produit": {
+        "name": "nom_produit",
+        "type": "string"
+      },
+      "categorie": {
+        "name": "categorie",
+        "type": "string"
+      },
+      "prix_unitaire": {
+        "name": "prix_unitaire",
+        "type": "float"
+      },
+      "poids_kg": {
+        "name": "poids_kg",
+        "type": "float"
+      },
+      "stock_minimum": {
+        "name": "stock_minimum",
+        "type": "integer"
+      },
+      "stock_actuel": {
+        "name": "stock_actuel",
+        "type": "integer"
+      },
+      "delai_reappro_jours": {
+        "name": "delai_reappro_jours",
+        "type": "integer"
+      },
+      "fournisseur_principal": {
+        "name": "fournisseur_principal",
+        "type": "string"
+      },
+      "statut": {
+        "name": "statut",
+        "type": "string"
+      }
+    }
+  }
+}

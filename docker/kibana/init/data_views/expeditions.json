@@ -1,0 +1,53 @@
+{
+  "data_view": {
+    "name": "expeditions",
+    "title": "expeditions*",
+    "timeFieldName": "date_expedition",
+    "fields": {
+      "id_expedition": {
+        "name": "id_expedition",
+        "type": "string"
+      },
+      "id_client": {
+        "name": "id_client",
+        "type": "string"
+      },
+      "date_commande": {
+        "name": "date_commande",
+        "type": "date"
+      },
+      "date_expedition": {
+        "name": "date_expedition",
+        "type": "date"
+      },
+      "date_livraison_prevue": {
+        "name": "date_livraison_prevue",
+        "type": "date"
+      },
+      "id_entrepot_depart": {
+        "name": "id_entrepot_depart",
+        "type": "string"
+      },
+      "id_entrepot_arrivee": {
+        "name": "id_entrepot_arrivee",
+        "type": "string"
+      },
+      "statut_expedition": {
+        "name": "statut_expedition",
+        "type": "string"
+      },
+      "mode_transport": {
+        "name": "mode_transport",
+        "type": "string"
+      },
+      "cout_transport": {
+        "name": "cout_transport",
+        "type": "float"
+      },
+      "priorite": {
+        "name": "priorite",
+        "type": "integer"
+      }
+    }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "type": "dashboard",
+  "attributes": {
+    "title": "Tableau de bord Clients",
+    "description": "Vue d'ensemble des clients",
+    "version": 1,
+    "kibanaSavedObjectMeta": {
+      "searchSourceJSON": "{\"query\":{\"query\":\"\",\"language\":\"kuery\"},\"filter\":[]}"
+    },
+    "panelsJSON": [
+      {
+        "version": "8.12.0",
+        "type": "visualization",
+        "gridData": {
+          "x": 0,
+          "y": 0,
+          "w": 24,
+          "h": 15,
+          "i": "1"
+        },
+        "panelIndex": "1",
+        "embeddableConfig": {
+          "title": "Répartition des clients par ville",
+          "type": "pie",
+          "params": {
+            "type": "pie",
+            "addTooltip": true,
+            "addLegend": true,
+            "legendPosition": "right",
+            "isDonut": false
+          },
+          "aggs": [
+            {
+              "id": "1",
+              "enabled": true,
+              "type": "count",
+              "schema": "metric",
+              "params": {}
+            },
+            {
+              "id": "2",
+              "enabled": true,
+              "type": "terms",
+              "schema": "segment",
+              "params": {
+                "field": "ville.keyword",
+                "size": 10
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "timeRestore": false,
+    "refreshInterval": {
+      "pause": true,
+      "value": 0
+    }
+  }
+}

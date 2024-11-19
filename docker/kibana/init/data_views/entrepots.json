@@ -1,0 +1,49 @@
+{
+  "data_view": {
+    "name": "entrepots",
+    "title": "entrepots*",
+    "timeFieldName": "date_modification",
+    "fields": {
+      "id_entrepot": {
+        "name": "id_entrepot",
+        "type": "string"
+      },
+      "nom_entrepot": {
+        "name": "nom_entrepot",
+        "type": "string"
+      },
+      "ville": {
+        "name": "ville",
+        "type": "string"
+      },
+      "pays": {
+        "name": "pays",
+        "type": "string"
+      },
+      "capacite_max_palettes": {
+        "name": "capacite_max_palettes",
+        "type": "integer"
+      },
+      "taux_remplissage": {
+        "name": "taux_remplissage",
+        "type": "float"
+      },
+      "temperature_moyenne": {
+        "name": "temperature_moyenne",
+        "type": "float"
+      },
+      "type_stockage": {
+        "name": "type_stockage",
+        "type": "string"
+      },
+      "niveau_securite": {
+        "name": "niveau_securite",
+        "type": "integer"
+      },
+      "statut": {
+        "name": "statut",
+        "type": "string"
+      }
+    }
+  }
+}
