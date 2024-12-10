@@ -1,0 +1,95 @@
+{
+  "mappings": {
+    "clients": {
+      "properties": {
+        "id": { "type": "long" },
+        "reference": { "type": "keyword" },
+        "company_name": { "type": "text", "fields": { "raw": { "type": "keyword" } } },
+        "first_name": { "type": "text", "fields": { "raw": { "type": "keyword" } } },
+        "last_name": { "type": "text", "fields": { "raw": { "type": "keyword" } } },
+        "email": { "type": "keyword" },
+        "phone": { "type": "keyword" },
+        "address": { "type": "text" },
+        "city": { "type": "keyword" },
+        "state": { "type": "keyword" },
+        "country": { "type": "keyword" },
+        "postal_code": { "type": "keyword" },
+        "type": { "type": "keyword" },
+        "status": { "type": "keyword" },
+        "credit_limit": { "type": "float" },
+        "tax_number": { "type": "keyword" },
+        "payment_terms": { "type": "integer" },
+        "created_at": { "type": "date" },
+        "updated_at": { "type": "date" }
+      }
+    },
+    "products": {
+      "properties": {
+        "id": { "type": "long" },
+        "reference": { "type": "keyword" },
+        "name": { "type": "text", "fields": { "raw": { "type": "keyword" } } },
+        "description": { "type": "text" },
+        "category": { "type": "keyword" },
+        "price": { "type": "float" },
+        "weight": { "type": "float" },
+        "stock_quantity": { "type": "integer" },
+        "minimum_stock": { "type": "integer" },
+        "reorder_point": { "type": "integer" },
+        "supplier_reference": { "type": "keyword" },
+        "status": { "type": "keyword" },
+        "created_at": { "type": "date" },
+        "updated_at": { "type": "date" }
+      }
+    },
+    "warehouses": {
+      "properties": {
+        "id": { "type": "long" },
+        "code": { "type": "keyword" },
+        "name": { "type": "text", "fields": { "raw": { "type": "keyword" } } },
+        "address": { "type": "text" },
+        "city": { "type": "keyword" },
+        "state": { "type": "keyword" },
+        "country": { "type": "keyword" },
+        "postal_code": { "type": "keyword" },
+        "phone": { "type": "keyword" },
+        "email": { "type": "keyword" },
+        "capacity": { "type": "integer" },
+        "type": { "type": "keyword" },
+        "status": { "type": "keyword" },
+        "created_at": { "type": "date" },
+        "updated_at": { "type": "date" }
+      }
+    },
+    "shipments": {
+      "properties": {
+        "id": { "type": "long" },
+        "tracking_number": { "type": "keyword" },
+        "origin_warehouse_id": { "type": "long" },
+        "destination_warehouse_id": { "type": "long" },
+        "client_id": { "type": "long" },
+        "order_date": { "type": "date" },
+        "shipping_date": { "type": "date" },
+        "expected_delivery_date": { "type": "date" },
+        "actual_delivery_date": { "type": "date" },
+        "status": { "type": "keyword" },
+        "shipping_method": { "type": "keyword" },
+        "shipping_cost": { "type": "float" },
+        "priority": { "type": "integer" },
+        "notes": { "type": "text" },
+        "created_at": { "type": "date" },
+        "updated_at": { "type": "date" }
+      }
+    },
+    "shipment_items": {
+      "properties": {
+        "id": { "type": "long" },
+        "shipment_id": { "type": "long" },
+        "product_id": { "type": "long" },
+        "quantity": { "type": "integer" },
+        "unit_price": { "type": "float" },
+        "created_at": { "type": "date" },
+        "updated_at": { "type": "date" }
+      }
+    }
+  }
+}

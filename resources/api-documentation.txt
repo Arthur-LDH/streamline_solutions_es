@@ -1,0 +1,85 @@
+# Documentation API StreamLineSolutions
+
+## Authentification
+Toutes les requêtes doivent inclure le header:
+```
+token: some_token
+```
+
+## Endpoints
+
+### Clients
+```
+GET /api/v1/clients
+```
+- Pagination: 100 éléments par page
+- Nombre total d'éléments: 5000
+- Dernière page: 50
+- Parameters:
+  * page (optional, default: 1)
+
+### Products
+```
+GET /api/v1/products
+```
+- Pagination: 100 éléments par page
+- Nombre total d'éléments: 20000
+- Dernière page: 200
+- Parameters:
+  * page (optional, default: 1)
+
+### Warehouses
+```
+GET /api/v1/warehouses
+```
+- Pagination: 100 éléments par page
+- Nombre total d'éléments: 100
+- Dernière page: 1
+- Parameters:
+  * page (optional, default: 1)
+
+### Shipments
+```
+GET /api/v1/shipments
+```
+- Pagination: 100 éléments par page
+- Nombre total d'éléments: 5000
+- Dernière page: 50
+- Parameters:
+  * page (optional, default: 1)
+
+### Shipment Items
+```
+GET /api/v1/shipment-items
+```
+- Pagination: 100 éléments par page
+- Nombre total d'éléments: ~15000 (moyenne de 3 items par expédition)
+- Dernière page: 150
+- Parameters:
+  * page (optional, default: 1)
+
+## Format de Réponse
+Toutes les réponses suivent ce format:
+```json
+{
+    "success": true,
+    "data": [...],
+    "pagination": {
+        "current_page": 1,
+        "per_page": 100,
+        "total": X,
+        "last_page": Y
+    }
+}
+```
+
+## Codes HTTP
+- 200: Succès
+- 401: Non authentifié (token manquant ou invalide)
+- 404: Ressource non trouvée
+- 500: Erreur serveur
+
+## Limitations
+- Rate limiting: Non
+- Cache: Non
+- Taille maximale de réponse: Non limitée

@@ -2,7 +2,9 @@ from elasticsearch import Elasticsearch
 import mysql.connector
 import time
 import logging
-from datetime import datetime
+from datetime import datetime, timedelta
+from services.external_api import ExternalApiService
+from config.api_config import API_CONFIG
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -31,83 +33,75 @@ def connect_to_elasticsearch():
         logger.error(f"Erreur de connexion à Elasticsearch: {e}")
         raise
 
+def get_sql_query(entity_type):
+    with open('resources/sql-queries.sql', 'r') as f:
+        sql_content = f.read()
+        queries = sql_content.split('--')
+        for query in queries:
+            if entity_type.lower() in query.lower():
+                return query.strip()
+    return None
+
+def index_external_data(es: Elasticsearch, api_service: ExternalApiService):
+    try:
+        endpoints = ['clients', 'products', 'warehouses', 'shipments', 'shipment-items']
+        
+        for endpoint in endpoints:
+            page = 1
+            while True:
+                response = api_service.get(f'/api/v1/{endpoint}', params={'page': page})
+                
+                if not response.get('data'):
+                    break
+                    
+                for item in response['data']:
+                    es.index(
+                        index=endpoint.replace('-', '_'),
+                        id=item['id'],
+                        document=item
+                    )
+                
+                if page >= response['pagination']['last_page']:
+                    break
+                    
+                page += 1
+                
+            logger.info(f"Finished indexing {endpoint}")
+
 def index_data():
     time.sleep(30)  # Attendre que les services démarrent
 
     try:
-        # Connexions
         mariadb_conn = connect_to_mariadb()
         es = connect_to_elasticsearch()
+        api_service = ExternalApiService(API_CONFIG['base_url'], API_CONFIG['api_key'])
         cursor = mariadb_conn.cursor(dictionary=True)
+        
+        # Get last sync date
+        last_sync_date = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S')
 
-        # Indexer les clients
-        cursor.execute("SELECT * FROM clients")
-        clients = cursor.fetchall()
-        for client in clients:
-            for key, value in client.items():
-                if isinstance(value, (datetime)):
-                    client[key] = value.isoformat()
-            es.index(
-                index='clients',
-                id=client['id_client'],
-                document=client
-            )
-            print(f"Client indexé: {client['id_client']}")
+        # Liste des entités à synchroniser
+        entities = ['clients', 'products', 'warehouses', 'shipments', 'shipment_items']
+        
+        for entity in entities:
+            query = get_sql_query(entity)
+            if query:
+                cursor.execute(query, {'last_sync_date': last_sync_date})
+                rows = cursor.fetchall()
+                for row in rows:
+                    es.index(
+                        index=entity,
+                        id=row['id'],
+                        document=row
+                    )
+                logger.info(f"Indexed {len(rows)} {entity}")
 
-        # Indexer les produits
-        cursor.execute("SELECT * FROM produits")
-        produits = cursor.fetchall()
-        for produit in produits:
-            for key, value in produit.items():
-                if isinstance(value, (datetime)):
-                    produit[key] = value.isoformat()
-            es.index(
-                index='produits',
-                id=produit['id_produit'],
-                document=produit
-            )
-            print(f"Produit indexé: {produit['id_produit']}")
-
-        # Indexer les entrepots
-        cursor.execute("SELECT * FROM entrepots")
-        entrepots = cursor.fetchall()
-        for entrepot in entrepots:
-            for key, value in entrepot.items():
-                if isinstance(value, (datetime)):
-                    entrepot[key] = value.isoformat()
-            es.index(
-                index='entrepots',
-                id=entrepot['id_entrepot'],
-                document=entrepot
-            )
-            print(f"Entrepot indexé: {entrepot['id_entrepot']}")
-
-        # Indexer les expéditions
-        cursor.execute("""
-            SELECT e.*,
-                   c.raison_sociale as client_nom,
-                   ed.nom_entrepot as entrepot_depart_nom,
-                   ea.nom_entrepot as entrepot_arrivee_nom
-            FROM expeditions e
-            JOIN clients c ON e.id_client = c.id_client
-            JOIN entrepots ed ON e.id_entrepot_depart = ed.id_entrepot
-            JOIN entrepots ea ON e.id_entrepot_arrivee = ea.id_entrepot
-        """)
-        expeditions = cursor.fetchall()
-        for expedition in expeditions:
-            for key, value in expedition.items():
-                if isinstance(value, (datetime)):
-                    expedition[key] = value.isoformat()
-            es.index(
-                index='expeditions',
-                id=expedition['id_expedition'],
-                document=expedition
-            )
-            print(f"Expédition indexée: {expedition['id_expedition']}")
+        # Index external data
+        index_external_data(es, api_service)
 
         cursor.close()
         mariadb_conn.close()
-        print("Indexation terminée avec succès")
+        logger.info("Indexation terminée avec succès")
 
     except Exception as e:
         logger.error(f"Erreur pendant l'indexation: {e}")
