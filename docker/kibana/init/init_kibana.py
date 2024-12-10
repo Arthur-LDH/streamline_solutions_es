@@ -3,20 +3,20 @@ import requests
 import time
 import os
 
-KIBANA_URL = "http://kibana:5601"
+KIBANA_URL = "https://kibana:5601"
 HEADERS = {"kbn-xsrf": "true", "Content-Type": "application/json"}
 
-# def wait_for_kibana(timeout=300):  # 5 minutes timeout
-#     start_time = time.time()
-#     while time.time() - start_time < timeout:
-#         try:
-#             response = requests.get(f"{KIBANA_URL}/api/status")
-#             if response.status_code == 200:
-#                 return True
-#         except requests.exceptions.RequestException:
-#             print("Waiting for Kibana to be ready...")
-#         time.sleep(10)
-#     raise TimeoutError("Kibana did not become available within the timeout period")
+def wait_for_kibana(timeout=300):  # 5 minutes timeout
+    start_time = time.time()
+    while time.time() - start_time < timeout:
+        try:
+            response = requests.get(f"{KIBANA_URL}/api/status")
+            if response.status_code == 200:
+                return True
+        except requests.exceptions.RequestException:
+            print("Waiting for Kibana to be ready...")
+        time.sleep(10)
+    raise TimeoutError("Kibana did not become available within the timeout period")
 
 # Créée les data views pour voir si nos données sont bien chargées
 def create_data_views():
@@ -51,6 +51,7 @@ def create_dashboards():
                 print(f"Response: {response.text}")
 
 if __name__ == "__main__":
-    # wait_for_kibana()
+    print("Starting data views and dashboards creation")
+    wait_for_kibana()
     create_data_views()
     create_dashboards()

@@ -1,4 +1,4 @@
-version: "3.8"
+name: streamline
 
 
 volumes:
@@ -8,13 +8,6 @@ volumes:
     driver: local
   kibanadata:
     driver: local
-  metricbeatdata01:
-    driver: local
-  filebeatdata01:
-    driver: local
-  logstashdata01:
-    driver: local
-  mariadb_data:
 
 
 networks:
@@ -79,21 +72,6 @@ services:
       timeout: 5s
       retries: 120
 
-
-  mariadb:
-    image: mariadb:latest
-    container_name: streamline-mariadb
-    environment:
-      MYSQL_ROOT_PASSWORD: root_password
-      MYSQL_DATABASE: streamline
-      MYSQL_USER: streamline_user
-      MYSQL_PASSWORD: your_secure_password
-    volumes:
-      - mariadb_data:/var/lib/mysql
-      - ./docker/mariadb/init.sql:/docker-entrypoint-initdb.d/init.sql
-    ports:
-      - "3306:3306"
-
   es01:
     depends_on:
       setup:
@@ -137,38 +115,6 @@ services:
       timeout: 10s
       retries: 120
 
-#  kibana:
-#    depends_on:
-#      es01:
-#        condition: service_healthy
-#    build:
-#      context: .
-#      dockerfile: docker/kibana/Dockerfile
-#    labels:
-#      co.elastic.logs/module: kibana
-#    volumes:
-#      - certs:/usr/share/kibana/config/certs
-#      - kibanadata:/usr/share/kibana/data
-#    ports:
-#      - ${KIBANA_PORT}:5601
-#    environment:
-#      - SERVERNAME=kibana
-#      - ELASTICSEARCH_HOSTS=https://es01:9200
-#      - ELASTICSEARCH_USERNAME=kibana_system
-#      - ELASTICSEARCH_PASSWORD=${KIBANA_PASSWORD}
-#      - ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES=config/certs/ca/ca.crt
-#      - XPACK_SECURITY_ENCRYPTIONKEY=${ENCRYPTION_KEY}
-#      - XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY=${ENCRYPTION_KEY}
-#      - XPACK_REPORTING_ENCRYPTIONKEY=${ENCRYPTION_KEY}
-#    healthcheck:
-#      test:
-#        [
-#          "CMD-SHELL",
-#          "curl -s -I http://localhost:5601 | grep -q 'HTTP/1.1 302 Found'",
-#        ]
-#      interval: 10s
-#      timeout: 10s
-#      retries: 120
 
   kibana:
     depends_on:
@@ -177,7 +123,7 @@ services:
     image: docker.elastic.co/kibana/kibana:${STACK_VERSION}
     build:
       context: .
-      dockerfile: docker/kibana/Dockerfile
+#      dockerfile: docker/kibana/Dockerfile
     labels:
       co.elastic.logs/module: kibana
     volumes:
@@ -194,6 +140,7 @@ services:
       - XPACK_SECURITY_ENCRYPTIONKEY=${ENCRYPTION_KEY}
       - XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY=${ENCRYPTION_KEY}
       - XPACK_REPORTING_ENCRYPTIONKEY=${ENCRYPTION_KEY}
+      - STACK_VERSION=${STACK_VERSION}
     healthcheck:
       test:
         [

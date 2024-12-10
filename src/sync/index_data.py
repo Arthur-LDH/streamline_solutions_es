@@ -67,6 +67,9 @@ def index_external_data(es: Elasticsearch, api_service: ExternalApiService):
                 page += 1
                 
             logger.info(f"Finished indexing {endpoint}")
+    except Exception as e:
+        logger.error(f"Erreur pendant l'indexation des données externes: {e}")
+        raise
 
 def index_data():
     time.sleep(30)  # Attendre que les services démarrent

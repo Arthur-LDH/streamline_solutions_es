@@ -11,8 +11,8 @@ set -e
 #    sleep 10
 #done
 #
-## Initialiser Kibana
-#python3 /usr/local/bin/init_kibana.py
+# Initialiser Kibana
+python3 /usr/local/bin/init_kibana.py
 
 # Maintenir le conteneur actif
 wait
