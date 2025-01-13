@@ -116,6 +116,24 @@ services:
       retries: 120
 
 
+  data-loader:
+    build:
+      context: .
+      dockerfile: docker/data-loader/Dockerfile
+    environment:
+      - API_URL=${API_URL}
+      - API_KEY=${API_KEY}
+      - ELASTICSEARCH_HOST=https://es01:9200
+      - ELASTICSEARCH_USER=elastic
+      - ELASTICSEARCH_PASSWORD=${ELASTIC_PASSWORD}
+      - ELASTICSEARCH_CA=/usr/share/elasticsearch/config/certs/ca/ca.crt
+    volumes:
+      - certs:/usr/share/elasticsearch/config/certs
+    depends_on:
+      es01:
+        condition: service_healthy
+
+
   kibana:
     depends_on:
       es01:
@@ -123,7 +141,7 @@ services:
     image: docker.elastic.co/kibana/kibana:${STACK_VERSION}
     build:
       context: .
-#      dockerfile: docker/kibana/Dockerfile
+      dockerfile: docker/kibana/Dockerfile
     labels:
       co.elastic.logs/module: kibana
     volumes:
