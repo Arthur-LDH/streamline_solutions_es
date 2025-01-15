@@ -1,0 +1,19 @@
+- pipeline.id: "clients"
+  path.config: "/usr/share/logstash/pipeline/clients.conf"
+  pipeline.workers: 1
+
+- pipeline.id: "products"
+  path.config: "/usr/share/logstash/pipeline/products.conf"
+  pipeline.workers: 1
+
+- pipeline.id: "shipments"
+  path.config: "/usr/share/logstash/pipeline/shipments.conf"
+  pipeline.workers: 1
+
+- pipeline.id: "shipment-items"
+  path.config: "/usr/share/logstash/pipeline/shipment-items.conf"
+  pipeline.workers: 1
+
+- pipeline.id: "warehouses"
+  path.config: "/usr/share/logstash/pipeline/warehouses.conf"
+  pipeline.workers: 1
